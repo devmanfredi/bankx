@@ -31,6 +31,7 @@ public class Bankslip {
     @NotNull
     private String customer;
 
+    @Transient
     private BigDecimal fine;
 
     @NotNull
