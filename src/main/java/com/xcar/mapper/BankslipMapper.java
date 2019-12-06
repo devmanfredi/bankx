@@ -17,6 +17,17 @@ public interface BankslipMapper {
             @Mapping(source = "customer", target = "customer"),
             @Mapping(source = "status", target = "status")
     })
-    Bankslip toBankslip(BankslipDTO bankslipDTO);
-    List<Bankslip> toBankslipList(List<BankslipDTO> bankslipDTOS);
+    BankslipDTO toDTO(Bankslip bankslip);
+    List<BankslipDTO> toDTOlList(List<Bankslip> bankslips);
+
+
+    @Mappings({
+            @Mapping(source = "due_date", target = "due_date"),
+            @Mapping(source = "total_in_cents", target = "total_in_cents"),
+            @Mapping(source = "customer", target = "customer"),
+            @Mapping(source = "status", target = "status")
+    })
+    Bankslip toEntity(BankslipDTO bankslipDTO);
+
+
 }
