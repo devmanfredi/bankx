@@ -33,5 +33,5 @@ public class BankslipDTO {
 
     @ApiModelProperty(value = "Status do Boleto", position = 4, example = "PENDING", allowableValues = "PENDING, PAID, CANCELED", required = true)
     @NotNull
-    private Status status;
+    private String status;
 }
