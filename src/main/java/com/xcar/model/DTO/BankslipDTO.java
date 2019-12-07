@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BankslipDTO {
 
-    @ApiModelProperty(value = "Data do boleto", example = "2019-09-16T04:27:19.034Z", required = true)
+    @ApiModelProperty(value = "Data do boleto", example = "2019-09-16", required = true)
     @NotNull
-    private LocalDateTime due_date;
+    private String due_date;
 
     @ApiModelProperty(value = "Valor em centavos", example = "10000", required = true)
     @NotNull

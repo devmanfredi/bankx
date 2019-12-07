@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -39,5 +41,11 @@ public class Bankslip {
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
     private Status status;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAT;
 
 }
