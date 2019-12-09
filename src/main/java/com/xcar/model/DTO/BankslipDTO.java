@@ -1,5 +1,6 @@
 package com.xcar.model.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xcar.model.enums.Status;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,9 +20,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BankslipDTO {
 
-    @ApiModelProperty(value = "Data do boleto", example = "2019-09-16", required = true)
+    @ApiModelProperty(value = "Data do boleto", example = "2019-12-31", required = true)
     @NotNull
-    private String due_date;
+    private LocalDate due_date;
 
     @ApiModelProperty(value = "Valor em centavos", example = "10000", required = true)
     @NotNull

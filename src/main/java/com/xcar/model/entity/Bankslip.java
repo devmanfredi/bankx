@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,7 +27,7 @@ public class Bankslip {
     private Long id;
 
     @NotNull
-    private LocalDateTime due_date;
+    private LocalDate due_date;
 
     @NotNull
     private BigDecimal total_in_cents;

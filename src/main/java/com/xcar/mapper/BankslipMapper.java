@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BankslipMapper {
     @Mappings({
-            @Mapping(source = "due_date", target = "due_date", dateFormat = "yyyy-MM-dd"),
+            @Mapping(source = "due_date", target = "due_date"),
             @Mapping(source = "total_in_cents", target = "total_in_cents"),
             @Mapping(source = "customer", target = "customer"),
             @Mapping(source = "status", target = "status")
@@ -22,10 +22,14 @@ public interface BankslipMapper {
 
 
     @Mappings({
-            @Mapping(source = "due_date", target = "due_date", dateFormat = "yyyy-MM-dd"),
+            @Mapping(source = "due_date", target = "due_date"),
             @Mapping(source = "total_in_cents", target = "total_in_cents"),
             @Mapping(source = "customer", target = "customer"),
-            @Mapping(source = "status", target = "status")
+            @Mapping(source = "status", target = "status"),
+            @Mapping(target = "createdAt", source = ""),
+            @Mapping(target = "fine", source = ""),
+            @Mapping(target = "id", source = ""),
+            @Mapping(target = "updatedAT", source = "")
     })
     Bankslip toEntity(BankslipDTO bankslipDTO);
 
