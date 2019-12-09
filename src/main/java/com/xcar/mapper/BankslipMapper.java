@@ -1,6 +1,7 @@
 package com.xcar.mapper;
 
 import com.xcar.model.DTO.BankslipDTO;
+import com.xcar.model.DTO.BankslipListDTO;
 import com.xcar.model.entity.Bankslip;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,6 +21,13 @@ public interface BankslipMapper {
     BankslipDTO toDTO(Bankslip bankslip);
     List<BankslipDTO> toDTOlList(List<Bankslip> bankslips);
 
+    @Mappings({
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "due_date", target = "due_date"),
+            @Mapping(source = "total_in_cents", target = "total_in_cents"),
+            @Mapping(source = "customer", target = "customer"),
+    })
+    List<BankslipListDTO> toListDTO(List<Bankslip> bankslips);
 
     @Mappings({
             @Mapping(source = "due_date", target = "due_date"),
