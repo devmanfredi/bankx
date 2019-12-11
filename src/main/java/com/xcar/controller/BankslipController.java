@@ -11,12 +11,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @AllArgsConstructor
@@ -64,5 +63,19 @@ public class BankslipController {
         return bkMapper.toListBankslipDTO(billets);
     }
 
+    @ApiOperation(
+            value = "Detalhes de um Boleto",
+            notes = "Método utilizado para ver os detalhes de um boleto"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Ok"),
+            @ApiResponse(code = 400, message = " Invalid id provided - it must be a valid UUID", response = ApiError.class),
+            @ApiResponse(code = 404, message = " Bankslip not found with the specified id", response = ApiError.class)
+    })
+    @GetMapping("/{bankslipId}")
+    private Bankslip findById(@PathVariable Long bankslipId) throws Exception {
+        Optional<Bankslip> bankslip = bkService.findById(bankslipId);
+        return (bankslip.isPresent()) ? bankslip.get() : null;
+    }
 
 }
