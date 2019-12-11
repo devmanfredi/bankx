@@ -3,6 +3,7 @@ package com.xcar.controller;
 import com.xcar.exception.ApiError;
 import com.xcar.mapper.BankslipMapper;
 import com.xcar.model.DTO.BankslipDTO;
+import com.xcar.model.DTO.BankslipListDTO;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.service.BankslipService;
 import io.swagger.annotations.Api;
@@ -14,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -35,10 +38,30 @@ public class BankslipController {
             @ApiResponse(code = 422, message = " Invalid bankslip provided.The possible reasons are: ○ A field of the provided bankslip was null or with invalid values", response = ApiError.class)
     })
     @PostMapping(value = "/bankslips")
-    private BankslipDTO save(@RequestBody BankslipDTO bankslipDTO){
+    private BankslipDTO save(@RequestBody BankslipDTO bankslipDTO) throws Exception {
         final Bankslip entity = bkMapper.toEntity(bankslipDTO);
-        bkService.save(entity);
-        return bkMapper.toDTO(entity);
+        try {
+            bkService.save(entity);
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+        return bankslipDTO;
+    }
+
+    @ApiOperation(
+            value = "Retorna uma lista de boletos",
+            notes = "Método utilizado para Listar todos os boletos"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Ok"),
+    })
+    @GetMapping("/Bankslips")
+    private List<BankslipListDTO> findAll(){
+        List billets = bkService.findAll();
+        if (billets.isEmpty()){
+            return Collections.emptyList();
+        }
+        return bkMapper.toListBankslipDTO(billets);
     }
 
 
