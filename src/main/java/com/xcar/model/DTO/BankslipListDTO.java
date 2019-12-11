@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class BankslipListDTO{
     private Long id;
     private LocalDate due_date;

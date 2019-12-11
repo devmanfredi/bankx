@@ -29,7 +29,6 @@ public class BankslipDTO {
     private BigDecimal total_in_cents;
 
     @ApiModelProperty(value = "Customer", example = "João da XCar", required = true)
-    @Size(min = 1, max = 120)
     @NotNull
     private String customer;
 
