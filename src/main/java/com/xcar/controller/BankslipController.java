@@ -75,6 +75,7 @@ public class BankslipController {
     @GetMapping("/{bankslipId}")
     private Bankslip findById(@PathVariable Long bankslipId) throws Exception {
         Optional<Bankslip> bankslip = bkService.findById(bankslipId);
+        bankslip.get().setFine(bkService.fineCalculate(bankslip.get()));
         return (bankslip.isPresent()) ? bankslip.get() : null;
     }
 
