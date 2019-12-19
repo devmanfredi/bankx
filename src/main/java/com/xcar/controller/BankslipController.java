@@ -54,7 +54,7 @@ public class BankslipController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Ok"),
     })
-    @GetMapping("/Bankslips")
+    @GetMapping("/bankslips")
     private List<BankslipListDTO> findAll(){
         List billets = bkService.findAll();
         if (billets.isEmpty()){
