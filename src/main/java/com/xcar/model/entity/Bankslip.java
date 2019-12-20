@@ -4,7 +4,6 @@ import com.xcar.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -39,7 +38,6 @@ public class Bankslip {
     private BigDecimal fine;
 
     @NotNull
-    @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
