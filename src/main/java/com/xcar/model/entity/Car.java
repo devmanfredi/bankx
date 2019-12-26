@@ -44,4 +44,8 @@ public class Car {
 
     @Column
     private BigDecimal price;
+
+    @NotNull
+    @OneToOne
+    private Color color;
 }
