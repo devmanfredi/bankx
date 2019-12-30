@@ -1,0 +1,6 @@
+{
+  "customer": "João da XCar",
+  "due_date": "2019-12-31",
+  "total_in_cents": 10000,
+  "status": "PENDING"
+}
