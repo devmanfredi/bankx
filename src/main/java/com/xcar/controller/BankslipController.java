@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -73,7 +74,7 @@ public class BankslipController {
             @ApiResponse(code = 404, message = " Bankslip not found with the specified id", response = ApiError.class)
     })
     @GetMapping("/{bankslipId}")
-    private Bankslip findById(@PathVariable Long bankslipId) throws Exception {
+    private Bankslip findById(@PathVariable UUID bankslipId) throws Exception {
         Optional<Bankslip> bankslip = bkService.findById(bankslipId);
         bankslip.get().setFine(bkService.fineCalculate(bankslip.get()));
         return (bankslip.isPresent()) ? bankslip.get() : null;
