@@ -7,13 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class BankslipListDTO{
-    private Long id;
+    private UUID id;
     private LocalDate due_date;
     private BigDecimal total_in_cents;
     private String customer;
