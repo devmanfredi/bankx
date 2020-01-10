@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -23,7 +24,8 @@ public class Bankslip {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(nullable = false, unique = true)
+    private UUID id;
 
     @NotNull
     private LocalDate due_date;
