@@ -1,17 +1,17 @@
 package com.xcar.service;
 
+import com.xcar.model.DTO.BankslipDTO;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.model.enums.Status;
-import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.chrono.ChronoLocalDate;
 import java.util.Calendar;
+import java.util.Optional;
+import java.util.UUID;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -55,4 +55,21 @@ public class BankslipService extends AbstractService{
         //return DAYS.between(DUO_DATE_FROM_CALCULATE = calendar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),now);
         return DAYS.between(DUO_DATE_FROM_CALCULATE.atStartOfDay(ZoneId.systemDefault()).toLocalDate(),now);
     }
+
+    public Bankslip update(UUID id, BankslipDTO dto) {
+        Optional bankslip = findById(id);
+        Bankslip bankslipEntity = new Bankslip();
+        bankslipEntity = (Bankslip) bankslip.get();
+        updateBankslip(bankslipEntity, dto);
+        return (Bankslip) repository.save(bankslipEntity);
+    }
+
+    private void updateBankslip(Bankslip bankslip, BankslipDTO dto) {
+        bankslip.setCustomer(dto.getCustomer());
+        bankslip.setDue_date(dto.getDue_date());
+        bankslip.setTotal_in_cents(dto.getTotal_in_cents());
+
+    }
+
+
 }
