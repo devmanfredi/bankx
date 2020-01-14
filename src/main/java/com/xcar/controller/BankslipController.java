@@ -80,4 +80,9 @@ public class BankslipController {
         return (bankslip.isPresent()) ? bankslip.get() : null;
     }
 
+    @PutMapping
+    private Bankslip update(@PathVariable UUID id, @RequestBody BankslipListDTO bankslip) {
+        return null;
+    }
+
 }
