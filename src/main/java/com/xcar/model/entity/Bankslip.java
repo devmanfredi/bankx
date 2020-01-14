@@ -24,7 +24,6 @@ public class Bankslip {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, unique = true)
     private UUID id;
 
     @NotNull
