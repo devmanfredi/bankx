@@ -5,6 +5,7 @@ import com.xcar.mapper.BankslipMapper;
 import com.xcar.model.DTO.BankslipDTO;
 import com.xcar.model.DTO.BankslipListDTO;
 import com.xcar.model.entity.Bankslip;
+import com.xcar.model.enums.Status;
 import com.xcar.service.BankslipService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -80,9 +81,9 @@ public class BankslipController {
         return (bankslip.isPresent()) ? bankslip.get() : null;
     }
 
-    @PutMapping
-    private Bankslip update(@PathVariable UUID id, @RequestBody BankslipListDTO bankslip) {
-        return null;
+    @PutMapping("/bankslips/{id}")
+    private BankslipDTO pay(@PathVariable String id, @RequestBody BankslipDTO dto) {
+        return bkService.payBankslip(id, Status.PAID);
     }
 
 }
