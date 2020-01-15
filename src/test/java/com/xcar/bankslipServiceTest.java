@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.Assert.assertThat;
 
@@ -30,10 +32,10 @@ public class bankslipServiceTest {
     @Test
     public void dadoUmBoleto_quandoEstiverPreenchido_entaoSalvar() {
         Bankslip bankslip = new Bankslip();
-        bankslip = BankslipBuilder.bankslip().build();
+        bankslip = BankslipBuilder.bankslip(null).build();
         Mockito.when(bkRepository.save(bankslip)).thenReturn(bankslip);
         Bankslip result = (Bankslip) bkService.save(bankslip);
-        assertThat(bankslip, Matchers.equalTo(bankslip));
+        assertThat(result, Matchers.equalTo(bankslip));
     }
 
     @Test
@@ -43,6 +45,15 @@ public class bankslipServiceTest {
         Mockito.when(bkRepository.findAll()).thenReturn(bankslips);
         List<Bankslip> returnBankslips = bkService.findAll();
         assertThat(returnBankslips, Matchers.equalTo(bankslips));
+    }
+
+    @Test
+    public void dadoUmId_quandoExistir_entaoRetornarDetalhes() {
+        Bankslip bankslip = new Bankslip();
+        bankslip = BankslipBuilder.bankslip(UUID.randomUUID()).build();
+        Mockito.when(bkRepository.findById(bankslip.getId())).thenReturn(Optional.of(bankslip));
+        Optional<Bankslip> result = bkService.findById(bankslip.getId());
+        assertThat(bankslip.getId(), Matchers.equalTo(result.get().getId()));
     }
 
 }
