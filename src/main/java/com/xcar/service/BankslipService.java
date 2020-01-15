@@ -3,6 +3,8 @@ package com.xcar.service;
 import com.xcar.model.DTO.BankslipDTO;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.model.enums.Status;
+import com.xcar.repository.BankslipRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,14 @@ import java.util.UUID;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
-public class BankslipService extends AbstractService{
+public class BankslipService extends AbstractService {
     public BankslipService(JpaRepository repository) {
         super(repository);
     }
+
+    @Autowired
+    private BankslipRepository bkRepository;
+
     private static LocalDate DUO_DATE_FROM_CALCULATE = null;
     private static final int FIRST_DAY = 1;
     private static final int LAST_DAY = 10;
@@ -27,7 +33,7 @@ public class BankslipService extends AbstractService{
     private static final String SECOND_PERCENTAGE = "0.01";
 
     public BigDecimal fineCalculate(Bankslip bankslip) throws Exception {
-        if (bankslip == null){
+        if (bankslip == null) {
             //TODO:Fazer classe de exception
             throw new Exception();
         }
@@ -72,4 +78,14 @@ public class BankslipService extends AbstractService{
     }
 
 
+    public BankslipDTO payBankslip(final String id, final Status paid) {
+        if (Status.PAID.equals(paid)) {
+            bkRepository.updateBankslipStatusById(id, paid.toString());
+        } else {
+            bkRepository.updateBankslipStatusById(id, Status.CANCELED.toString());
+        }
+        final BankslipDTO dto = new BankslipDTO();
+        dto.setStatus(paid.toString());
+        return dto;
+    }
 }
