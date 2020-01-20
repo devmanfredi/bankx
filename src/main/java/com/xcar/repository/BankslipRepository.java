@@ -8,10 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
 
 @Repository
-public interface BankslipRepository extends JpaRepository<Bankslip, UUID> {
+public interface BankslipRepository extends JpaRepository<Bankslip, String> {
     @Transactional
     @Modifying
     @Query("UPDATE Bankslip b SET b.status = :status WHERE b.id = :id")
