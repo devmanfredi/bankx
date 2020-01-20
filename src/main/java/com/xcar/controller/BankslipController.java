@@ -4,8 +4,8 @@ import com.xcar.exception.ApiError;
 import com.xcar.mapper.BankslipMapper;
 import com.xcar.model.DTO.BankslipDTO;
 import com.xcar.model.DTO.BankslipListDTO;
+import com.xcar.model.DTO.response.BankslipWithFine;
 import com.xcar.model.entity.Bankslip;
-import com.xcar.model.enums.Status;
 import com.xcar.service.BankslipService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,11 +42,13 @@ public class BankslipController {
     private BankslipDTO save(@RequestBody BankslipDTO bankslipDTO) throws Exception {
         final Bankslip entity = bkMapper.toEntity(bankslipDTO);
         try {
+            entity.setId(UUID.randomUUID().toString());
             bkService.save(entity);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-        return bankslipDTO;
+        //TODO:Melhorar o retorno através de um mapper
+        return bkMapper.toDTO(entity);
     }
 
     @ApiOperation(
@@ -74,16 +76,23 @@ public class BankslipController {
             @ApiResponse(code = 400, message = " Invalid id provided - it must be a valid UUID", response = ApiError.class),
             @ApiResponse(code = 404, message = " Bankslip not found with the specified id", response = ApiError.class)
     })
-    @GetMapping("/{bankslipId}")
-    private Bankslip findById(@PathVariable UUID bankslipId) throws Exception {
-        Optional<Bankslip> bankslip = bkService.findById(bankslipId);
+    @GetMapping("/bankslips/{id}")
+    private BankslipWithFine findById(@PathVariable String id) throws Exception {
+        Optional<Bankslip> bankslip = bkService.findById(id);
+        if (!bankslip.isPresent()) {
+            throw new Exception("Boleto não encontrado!");
+        }
         bankslip.get().setFine(bkService.fineCalculate(bankslip.get()));
-        return (bankslip.isPresent()) ? bankslip.get() : null;
+        return (bankslip.isPresent()) ? bkMapper.toDtoWithFine(bankslip.get()) : null;
     }
 
     @PutMapping("/bankslips/{id}")
-    private BankslipDTO pay(@PathVariable String id, @RequestBody BankslipDTO dto) {
-        return bkService.payBankslip(id, Status.PAID);
+    private String pay(@PathVariable String id) throws Exception {
+        Optional<Bankslip> billet = bkService.findById(id);
+        if (!billet.isPresent()) {
+            throw new Exception("Boleto não encontrado!");
+        }
+        return bkService.payBankslip(billet);
     }
 
 }
