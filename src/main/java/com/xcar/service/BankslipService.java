@@ -41,7 +41,7 @@ public class BankslipService extends AbstractService {
         if(bankslip.getStatus().equals(Status.PENDING)){
             DUO_DATE_FROM_CALCULATE = bankslip.getDue_date();
             BigDecimal percentage = getFinePercentage();
-            fine = bankslip.getTotal_in_cents().multiply(percentage).setScale(0,BigDecimal.ROUND_HALF_EVEN);
+            fine = bankslip.getTotal_in_cents().multiply(percentage);
         }
         return fine;
     }
@@ -73,19 +73,17 @@ public class BankslipService extends AbstractService {
     private void updateBankslip(Bankslip bankslip, BankslipDTO dto) {
         bankslip.setCustomer(dto.getCustomer());
         bankslip.setDue_date(dto.getDue_date());
-        bankslip.setTotal_in_cents(dto.getTotal_in_cents());
+        //bankslip.setTotal_in_cents(BigDecimal.valueOf(dto.getTotal_in_cents()));
 
     }
 
 
-    public BankslipDTO payBankslip(final String id, final Status paid) {
-        if (Status.PAID.equals(paid)) {
-            bkRepository.updateBankslipStatusById(id, paid.toString());
+    public String payBankslip(Optional<Bankslip> billet) {
+        if (Status.PAID.equals(billet.get().getStatus())) {
+            bkRepository.updateBankslipStatusById(billet.get().getId(), billet.get().getStatus().toString());
         } else {
-            bkRepository.updateBankslipStatusById(id, Status.CANCELED.toString());
+            bkRepository.updateBankslipStatusById(billet.get().getId(), Status.CANCELED.toString());
         }
-        final BankslipDTO dto = new BankslipDTO();
-        dto.setStatus(paid.toString());
-        return dto;
+        return Status.PAID.toString();
     }
 }
