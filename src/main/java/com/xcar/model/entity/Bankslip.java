@@ -1,5 +1,6 @@
 package com.xcar.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xcar.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,6 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -23,8 +23,7 @@ import java.util.UUID;
 public class Bankslip {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private String id;
 
     @NotNull
     private LocalDate due_date;
@@ -43,9 +42,11 @@ public class Bankslip {
     private Status status;
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAT;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime updateAt;
 
 }

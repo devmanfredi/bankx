@@ -50,7 +50,7 @@ public class bankslipServiceTest {
     @Test
     public void dadoUmId_quandoExistir_entaoRetornarDetalhes() {
         Bankslip bankslip = new Bankslip();
-        bankslip = BankslipBuilder.bankslip(UUID.randomUUID()).build();
+        bankslip = BankslipBuilder.bankslip(UUID.randomUUID().toString()).build();
         Mockito.when(bkRepository.findById(bankslip.getId())).thenReturn(Optional.of(bankslip));
         Optional<Bankslip> result = bkService.findById(bankslip.getId());
         assertThat(bankslip.getId(), Matchers.equalTo(result.get().getId()));

@@ -14,7 +14,7 @@ public class BankslipBuilder {
     public static BankslipBuilder admin(){
         BankslipBuilder builder = new BankslipBuilder();
         builder.bankslip = Bankslip.builder()
-               .id(UUID.randomUUID())
+                .id(UUID.randomUUID().toString())
                .customer("Admmin")
                .due_date(LocalDate.now())
                .status(Status.PAID)
@@ -23,15 +23,15 @@ public class BankslipBuilder {
         return builder;
     }
 
-    public static BankslipBuilder bankslip(UUID uuid) {
+    public static BankslipBuilder bankslip(String uuid) {
         BankslipBuilder builder = new BankslipBuilder();
         builder.bankslip = Bankslip.builder()
                 .id(uuid)
-               .customer("João")
-               .due_date(LocalDate.now())
-               .status(Status.PENDING)
-               .total_in_cents(BigDecimal.valueOf(10000))
-               .build();
+                .customer("João")
+                .due_date(LocalDate.now())
+                .status(Status.PENDING)
+                .total_in_cents(BigDecimal.valueOf(10000))
+                .build();
         return builder;
     }
 
