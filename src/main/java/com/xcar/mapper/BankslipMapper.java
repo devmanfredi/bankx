@@ -2,6 +2,7 @@ package com.xcar.mapper;
 
 import com.xcar.model.DTO.BankslipDTO;
 import com.xcar.model.DTO.BankslipListDTO;
+import com.xcar.model.DTO.response.BankslipStatusPay;
 import com.xcar.model.DTO.response.BankslipWithFine;
 import com.xcar.model.entity.Bankslip;
 import org.mapstruct.Mapper;
@@ -53,5 +54,10 @@ public interface BankslipMapper {
             @Mapping(source = "status", target = "status")
     })
     BankslipDTO toDTO(Bankslip bankslip);
+
+    @Mappings({
+            @Mapping(source = "status", target = "status"),
+    })
+    BankslipStatusPay toStatusBeforePut(Bankslip bankslip);
 
 }

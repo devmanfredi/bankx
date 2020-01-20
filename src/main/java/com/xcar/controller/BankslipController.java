@@ -4,6 +4,7 @@ import com.xcar.exception.ApiError;
 import com.xcar.mapper.BankslipMapper;
 import com.xcar.model.DTO.BankslipDTO;
 import com.xcar.model.DTO.BankslipListDTO;
+import com.xcar.model.DTO.response.BankslipStatusPay;
 import com.xcar.model.DTO.response.BankslipWithFine;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.service.BankslipService;
@@ -87,12 +88,11 @@ public class BankslipController {
     }
 
     @PutMapping("/bankslips/{id}")
-    private String pay(@PathVariable String id) throws Exception {
+    private BankslipStatusPay changeStatus(@PathVariable String id, @RequestBody BankslipStatusPay bankslipStatusPay) throws Exception {
         Optional<Bankslip> billet = bkService.findById(id);
         if (!billet.isPresent()) {
             throw new Exception("Boleto não encontrado!");
         }
-        return bkService.payBankslip(billet);
+        return bkMapper.toStatusBeforePut(bkService.changeStatus(billet, bankslipStatusPay));
     }
-
 }

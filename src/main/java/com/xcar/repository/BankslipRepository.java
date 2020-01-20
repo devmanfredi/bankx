@@ -1,6 +1,7 @@
 package com.xcar.repository;
 
 import com.xcar.model.entity.Bankslip;
+import com.xcar.model.enums.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +15,5 @@ public interface BankslipRepository extends JpaRepository<Bankslip, String> {
     @Transactional
     @Modifying
     @Query("UPDATE Bankslip b SET b.status = :status WHERE b.id = :id")
-    void updateBankslipStatusById(@Param("id") String id, @Param("status") String status);
+    void updateBankslipStatusById(@Param("id") String id, @Param("status") Status status);
 }

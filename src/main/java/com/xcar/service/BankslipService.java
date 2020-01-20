@@ -1,6 +1,6 @@
 package com.xcar.service;
 
-import com.xcar.model.DTO.BankslipDTO;
+import com.xcar.model.DTO.response.BankslipStatusPay;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.model.enums.Status;
 import com.xcar.repository.BankslipRepository;
@@ -13,7 +13,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Optional;
-import java.util.UUID;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -55,35 +54,22 @@ public class BankslipService extends AbstractService {
         }
         return percentage;
     }
+
     private Long getDaysBetweenDueDateAndToday() {
         LocalDate now = LocalDate.now();
         Calendar calendar = Calendar.getInstance();
         //return DAYS.between(DUO_DATE_FROM_CALCULATE = calendar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),now);
-        return DAYS.between(DUO_DATE_FROM_CALCULATE.atStartOfDay(ZoneId.systemDefault()).toLocalDate(),now);
+        return DAYS.between(DUO_DATE_FROM_CALCULATE.atStartOfDay(ZoneId.systemDefault()).toLocalDate(), now);
     }
 
-    public Bankslip update(UUID id, BankslipDTO dto) {
-        Optional bankslip = findById(id);
-        Bankslip bankslipEntity = new Bankslip();
-        bankslipEntity = (Bankslip) bankslip.get();
-        updateBankslip(bankslipEntity, dto);
-        return (Bankslip) repository.save(bankslipEntity);
-    }
-
-    private void updateBankslip(Bankslip bankslip, BankslipDTO dto) {
-        bankslip.setCustomer(dto.getCustomer());
-        bankslip.setDue_date(dto.getDue_date());
-        //bankslip.setTotal_in_cents(BigDecimal.valueOf(dto.getTotal_in_cents()));
-
-    }
-
-
-    public String payBankslip(Optional<Bankslip> billet) {
-        if (Status.PAID.equals(billet.get().getStatus())) {
-            bkRepository.updateBankslipStatusById(billet.get().getId(), billet.get().getStatus().toString());
-        } else {
-            bkRepository.updateBankslipStatusById(billet.get().getId(), Status.CANCELED.toString());
+    public Bankslip changeStatus(Optional<Bankslip> billet, BankslipStatusPay bankslipStatusPay) {
+        //bkRepository.updateBankslipStatusById(billet.get().getId(), bankslipStatusPay.getStatus());
+        if (Status.PENDING.equals(billet.get().getStatus())) {
+            bkRepository.updateBankslipStatusById(billet.get().getId(), bankslipStatusPay.getStatus());
+        } else if (Status.PAID.equals(billet.get().getStatus())) {
+            bkRepository.updateBankslipStatusById(billet.get().getId(), bankslipStatusPay.getStatus());
         }
-        return Status.PAID.toString();
+        billet.get().setStatus(bankslipStatusPay.getStatus());
+        return billet.get();
     }
 }
