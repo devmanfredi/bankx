@@ -93,6 +93,7 @@ public class BankslipController {
         if (!billet.isPresent()) {
             throw new Exception("Boleto não encontrado!");
         }
-        return bkMapper.toStatusBeforePut(bkService.changeStatus(billet, bankslipStatusPay));
+        Bankslip bankslip = bkService.changeStatus(billet, bankslipStatusPay);
+        return bkMapper.toStatusBeforePut(bankslip);
     }
 }

@@ -56,7 +56,7 @@ public interface BankslipMapper {
     BankslipDTO toDTO(Bankslip bankslip);
 
     @Mappings({
-            @Mapping(source = "status", target = "status"),
+            @Mapping(source = "status", target = "status")
     })
     BankslipStatusPay toStatusBeforePut(Bankslip bankslip);
 
