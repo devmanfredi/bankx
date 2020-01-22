@@ -23,10 +23,10 @@ public class BankslipBuilder {
         return builder;
     }
 
-    public static BankslipBuilder bankslip(String uuid) {
+    public static BankslipBuilder bankslip() {
         BankslipBuilder builder = new BankslipBuilder();
         builder.bankslip = Bankslip.builder()
-                .id(uuid)
+                .id(UUID.randomUUID().toString())
                 .customer("João")
                 .due_date(LocalDate.now())
                 .status(Status.PENDING)
