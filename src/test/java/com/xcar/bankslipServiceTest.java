@@ -7,15 +7,16 @@ import com.xcar.service.BankslipService;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.Assert.assertThat;
 
@@ -23,7 +24,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class bankslipServiceTest {
 
-    @Mock
+    @MockBean
     BankslipRepository bkRepository;
     @Autowired
     BankslipService bkService;
@@ -31,7 +32,7 @@ public class bankslipServiceTest {
     @Test
     public void dadoUmBoleto_quandoEstiverPreenchido_entaoSalvar() {
         Bankslip bankslip = new Bankslip();
-        bankslip = BankslipBuilder.bankslip().build();
+        bankslip = BankslipBuilder.bankslip(UUID.randomUUID().toString()).build();
         Mockito.when(bkRepository.save(bankslip)).thenReturn(bankslip);
         Bankslip result = (Bankslip) bkService.save(bankslip);
         assertThat(result, Matchers.equalTo(bankslip));
@@ -40,20 +41,20 @@ public class bankslipServiceTest {
     @Test
     public void dadoBoletosExistentes_quandoHouverCadastros_entaoRetornarTodos() {
         List<Bankslip> bankslips = new ArrayList<>();
-        bankslips = bkRepository.findAll();
+        bankslips = BankslipBuilder.bankslipList().getBankslipList();
         Mockito.when(bkRepository.findAll()).thenReturn(bankslips);
-        List<Bankslip> returnBankslips = bkService.findAll();
-        assertThat(returnBankslips, Matchers.equalTo(bankslips));
+        List<Bankslip> result = bkService.findAll();
+        assertThat(result, Matchers.equalTo(bankslips));
     }
 
     @Test
-    public void dadoUmId_quandoExistir_entaoRetornarDetalhes() {
+    public void dadoUmId_quandoExistir_entaoRetornarDetalhes() throws Throwable {
         Bankslip bankslip = new Bankslip();
-        bankslip = BankslipBuilder.bankslip().build();
-        Object save = bkService.save(bankslip);
+        String uuid = UUID.randomUUID().toString();
+        bankslip = BankslipBuilder.bankslip(uuid).build();
         Mockito.when(bkRepository.findById(bankslip.getId())).thenReturn(Optional.of(bankslip));
-        Optional<Bankslip> result = bkService.findById(bankslip.getId());
-        assertThat(bankslip.getId(), Matchers.equalTo(result.get().getId()));
+        Bankslip result = (Bankslip) bkService.findById(bankslip.getId()).orElseThrow(Exception::new);
+        assertThat(result.getId(), Matchers.equalTo(bankslip.getId()));
     }
 
 }
