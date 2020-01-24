@@ -1,4 +1,4 @@
-package com.xcar;
+package com.xcar.services;
 
 import com.xcar.builders.BankslipBuilder;
 import com.xcar.model.entity.Bankslip;
