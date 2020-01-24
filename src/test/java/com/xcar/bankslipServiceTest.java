@@ -59,7 +59,12 @@ public class bankslipServiceTest {
 
     @Test
     public void dadoBoleto_quandoNaoHouverStatus_entaoNaoSalvar() {
-
+        Bankslip bankslip = new Bankslip();
+        bankslip = BankslipBuilder.bankslip(UUID.randomUUID().toString()).build();
+        bankslip.setStatus(null);
+        Mockito.when(bkRepository.save(bankslip)).thenReturn(null);
+        Bankslip result = (Bankslip) bkService.save(bankslip);
+        assertThat(result, Matchers.equalTo(null));
     }
 
 }
