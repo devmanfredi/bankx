@@ -57,4 +57,9 @@ public class bankslipServiceTest {
         assertThat(result.getId(), Matchers.equalTo(bankslip.getId()));
     }
 
+    @Test
+    public void dadoBoleto_quandoNaoHouverStatus_entaoNaoSalvar() {
+
+    }
+
 }
