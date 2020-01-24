@@ -77,5 +77,25 @@ public class bankslipServiceTest {
         assertThat(result, Matchers.equalTo(null));
     }
 
+    @Test
+    public void dadoBoleto_quandoNaoHouveCustomer_entaoNaoSalvar() {
+        Bankslip bankslip = new Bankslip();
+        bankslip = BankslipBuilder.bankslip(UUID.randomUUID().toString()).build();
+        bankslip.setCustomer(null);
+        Mockito.when(bkRepository.save(bankslip)).thenReturn(null);
+        Bankslip result = (Bankslip) bkService.save(bankslip);
+        assertThat(result, Matchers.equalTo(null));
+    }
+
+    @Test
+    public void dadoBoleto_quandoNaoHouveValor_entaoNaoSalvar() {
+        Bankslip bankslip = new Bankslip();
+        bankslip = BankslipBuilder.bankslip(UUID.randomUUID().toString()).build();
+        bankslip.setTotal_in_cents(null);
+        Mockito.when(bkRepository.save(bankslip)).thenReturn(null);
+        Bankslip result = (Bankslip) bkService.save(bankslip);
+        assertThat(result, Matchers.equalTo(null));
+    }
+
 
 }
