@@ -2,6 +2,7 @@ package com.xcar.mappers;
 
 import com.xcar.builders.BankslipBuilder;
 import com.xcar.mapper.BankslipMapper;
+import com.xcar.model.DTO.BankslipDTO;
 import com.xcar.model.DTO.BankslipListDTO;
 import com.xcar.model.entity.Bankslip;
 import org.hamcrest.Matchers;
@@ -40,4 +41,14 @@ public class BankslipMapperTest {
         assertThat(bankslipListDTOS, Matchers.equalTo(bkmaper.toListBankslipDTO(bankslips)));
     }
 
+    @Test
+    public void dadaUmaListaDTO_quandoExecutarMapper_entaoRetornarListaPadrao() {
+        Bankslip bankslip = BankslipBuilder.bankslip(UUID.randomUUID().toString()).build();
+        bankslip.setId(null);
+        bankslip.setFine(null);
+        bankslip.setCreatedAt(null);
+        bankslip.setUpdateAt(null);
+        BankslipDTO bkDTO = bkmaper.toDTO(bankslip);
+        assertThat(bkmaper.toEntity(bkDTO), Matchers.equalTo(bankslip));
+    }
 }
