@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertThat;
@@ -30,6 +31,13 @@ public class BankslipMapperTest {
         assertThat(bkDTO, Matchers.notNullValue());
         assertThat(bkDTO.getId(), Matchers.equalTo(bankslip.getId()));
 
+    }
+
+    @Test
+    public void dadaUmaListaPadrao_quandoExecutarMapper_entaoRetornarListaDTO() {
+        List<Bankslip> bankslips = BankslipBuilder.bankslipList().getBankslipList();
+        List<BankslipListDTO> bankslipListDTOS = bkmaper.toListBankslipDTO(bankslips);
+        assertThat(bankslipListDTOS, Matchers.equalTo(bkmaper.toListBankslipDTO(bankslips)));
     }
 
 }
