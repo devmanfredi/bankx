@@ -3,6 +3,7 @@ package com.xcar.controllers;
 import com.xcar.builders.BankslipBuilder;
 import com.xcar.mapper.BankslipMapper;
 import com.xcar.model.DTO.BankslipDTO;
+import com.xcar.model.DTO.BankslipListDTO;
 import com.xcar.model.DTO.response.BankslipWithFine;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.repository.BankslipRepository;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -76,8 +78,18 @@ public class BankslipControllerTest {
                 .content(convertObjectToJsonBytes(bankslip)))
                 .andExpect(status().isOk());
         boleto.andExpect(jsonPath("$.id", Matchers.is(bankslip.getId())));
-
-
     }
 
+    @Test
+    public void quandoBuscarLista_entaoRetornarLista() throws Exception {
+        List<Bankslip> bankslips = BankslipBuilder.bankslipList().getBankslipList();
+        List<BankslipListDTO> bankslipListDTOS = bkMapper.toListBankslipDTO(bankslips);
+        Mockito.when(bkRepository.findAll()).thenReturn(bankslips);
+
+        ResultActions result = mvc.perform(get("/rest/bankslips")
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(convertObjectToJsonBytes(bankslipListDTOS)))
+                .andExpect(status().isOk());
+        result.andExpect((jsonPath("$[0].id", Matchers.is(bankslipListDTOS.get(0).getId()))));
+    }
 }
