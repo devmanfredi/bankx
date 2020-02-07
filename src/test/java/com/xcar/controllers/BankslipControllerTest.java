@@ -6,6 +6,7 @@ import com.xcar.model.DTO.BankslipDTO;
 import com.xcar.model.DTO.BankslipListDTO;
 import com.xcar.model.DTO.response.BankslipWithFine;
 import com.xcar.model.entity.Bankslip;
+import com.xcar.model.enums.Status;
 import com.xcar.repository.BankslipRepository;
 import com.xcar.service.BankslipService;
 import org.hamcrest.Matchers;
@@ -27,8 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.xcar.util.TestUtil.convertObjectToJsonBytes;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -91,5 +91,18 @@ public class BankslipControllerTest {
                 .content(convertObjectToJsonBytes(bankslipListDTOS)))
                 .andExpect(status().isOk());
         result.andExpect((jsonPath("$[0].id", Matchers.is(bankslipListDTOS.get(0).getId()))));
+    }
+
+    @Test
+    public void dadoBoleto_quandoPendente_entaoDeveSerPago() throws Exception {
+        Bankslip bankslip = BankslipBuilder.bankslip(UUID.randomUUID().toString()).build();
+        Mockito.when(bkRepository.findById(bankslip.getId())).thenReturn(Optional.of(bankslip));
+        Mockito.doThrow(new RuntimeException()).when(bkRepository).updateBankslipStatusById(bankslip.getId(), Status.PAID);
+
+        ResultActions result = mvc.perform(put("/rest/bankslips/" + bankslip.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(convertObjectToJsonBytes(bankslip))).andExpect(status().isOk());
+        Object ob = result.andReturn().getResponse().getContentAsString();
+        result.andExpect((jsonPath("$.status", Matchers.is(bankslip.getStatus()))));
     }
 }
