@@ -2,10 +2,8 @@ package com.xcar.controller;
 
 import com.xcar.exception.ApiError;
 import com.xcar.mapper.BankslipMapper;
-import com.xcar.model.DTO.BankslipDTO;
-import com.xcar.model.DTO.BankslipListDTO;
-import com.xcar.model.DTO.response.BankslipStatusPay;
-import com.xcar.model.DTO.response.BankslipWithFine;
+import com.xcar.model.DTO.request.BankslipDTO;
+import com.xcar.model.DTO.response.*;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.service.BankslipService;
 import io.swagger.annotations.Api;
@@ -30,6 +28,7 @@ public class BankslipController {
     private BankslipService bkService;
     private BankslipMapper bkMapper;
 
+
     @ApiOperation(
             value = "Cria um Boleto",
             notes = "Método utilizado para criar um Boleto"
@@ -40,7 +39,7 @@ public class BankslipController {
             @ApiResponse(code = 422, message = " Invalid bankslip provided.The possible reasons are: ○ A field of the provided bankslip was null or with invalid values", response = ApiError.class)
     })
     @PostMapping(value = "/bankslips")
-    private BankslipDTO save(@RequestBody BankslipDTO bankslipDTO) throws Exception {
+    private ResponseDTO save(@RequestBody BankslipDTO bankslipDTO) throws Exception {
         final Bankslip entity = bkMapper.toEntity(bankslipDTO);
         try {
             entity.setId(UUID.randomUUID().toString());
@@ -60,12 +59,16 @@ public class BankslipController {
             @ApiResponse(code = 200, message = "Ok"),
     })
     @GetMapping("/bankslips")
-    private List<BankslipListDTO> findAll(){
+    private ResponseListDTO findAll(){
         List billets = bkService.findAll();
         if (billets.isEmpty()){
-            return Collections.emptyList();
+            return null;
         }
-        return bkMapper.toListBankslipDTO(billets);
+        ResponseListDTO responseListDTO = new ResponseListDTO();
+        responseListDTO.setStatus("200");
+        responseListDTO.setMessage("OK");
+        responseListDTO.setBankslips(bkMapper.toListBankslipDTO(billets));
+        return responseListDTO;
     }
 
     @ApiOperation(
@@ -78,13 +81,13 @@ public class BankslipController {
             @ApiResponse(code = 404, message = " Bankslip not found with the specified id", response = ApiError.class)
     })
     @GetMapping("/bankslips/{id}")
-    private BankslipWithFine findById(@PathVariable String id) throws Exception {
+    private ResponseFineDTO findById(@PathVariable String id) throws Exception {
         Optional<Bankslip> bankslip = bkService.findById(id);
         if (!bankslip.isPresent()) {
             throw new Exception("Boleto não encontrado!");
         }
         bankslip.get().setFine(bkService.fineCalculate(bankslip.get()));
-        return (bankslip.isPresent()) ? bkMapper.toDtoWithFine(bankslip.get()) : null;
+        return (bankslip.isPresent()) ? bkMapper.toDtoFine(bankslip.get()) : null;
     }
 
     @PutMapping("/bankslips/{id}")
