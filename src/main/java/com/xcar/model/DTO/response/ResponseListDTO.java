@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ResponseListDTO {
-    private String message;
     private String status;
+    private String message;
     List<BankslipListDTO> bankslips;
 }

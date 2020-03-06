@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResponseFineDTO {
+public class ResponsePayDTO {
     private String status;
     private String message;
-    private BankslipWithFine bankslip;
+    private BankslipStatusPay bankslip;
 }

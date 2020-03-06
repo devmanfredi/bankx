@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ResponseDTO {
-    private String message;
     private String status;
+    private String message;
     private BankslipDTO bankslip;
 }
