@@ -99,4 +99,14 @@ public class BankslipController {
         Bankslip bankslip = bkService.changeStatus(billet, bankslipStatusPay);
         return bkMapper.toStatusBeforePut(bankslip);
     }
+    @PutMapping("/bankslips/pay/{id}")
+    private ResponsePayDTO payment(@PathVariable String id) throws Exception {
+        Optional<Bankslip> billet = bkService.findById(id);
+        if (!billet.isPresent()) {
+            throw new Exception("Boleto não encontrado!");
+        }
+        Bankslip bankslipPaiding = bkService.pay(billet.get());
+        return bkMapper.toDTOPay(bankslipPaiding);
+    }
+
 }
