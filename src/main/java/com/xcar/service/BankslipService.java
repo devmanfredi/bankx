@@ -72,4 +72,12 @@ public class BankslipService extends AbstractService {
         billet.get().setStatus(bankslipStatusPay.getStatus());
         return billet.get();
     }
+
+    public Bankslip pay(Bankslip bankslip){
+        if (Status.PENDING.equals(bankslip.getStatus())) {
+            bkRepository.updateBankslipStatusById(bankslip.getId(), Status.PAID);
+            bankslip.setStatus(Status.PAID);
+        }
+        return bankslip;
+    }
 }
