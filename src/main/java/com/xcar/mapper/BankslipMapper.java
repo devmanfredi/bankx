@@ -62,4 +62,12 @@ public interface BankslipMapper {
     })
     BankslipStatusPay toStatusBeforePut(Bankslip bankslip);
 
+    @Mappings({
+            @Mapping(target = "status", expression = "java(\"204\")"),
+            @Mapping(target = "message", expression = "java(\"OK\")"),
+            @Mapping(target = "bankslip.id", source = "id"),
+            @Mapping(target = "bankslip.status", source = "status")
+    })
+    ResponsePayDTO toDTOPay(Bankslip bankslip);
+
 }
