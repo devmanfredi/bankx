@@ -1,4 +1,4 @@
-package com.xcar.model.DTO;
+package com.xcar.model.DTO.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

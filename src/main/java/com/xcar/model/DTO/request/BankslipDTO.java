@@ -1,4 +1,4 @@
-package com.xcar.model.DTO;
+package com.xcar.model.DTO.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

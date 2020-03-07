@@ -1,9 +1,7 @@
 package com.xcar.mapper;
 
-import com.xcar.model.DTO.BankslipDTO;
-import com.xcar.model.DTO.BankslipListDTO;
-import com.xcar.model.DTO.response.BankslipStatusPay;
-import com.xcar.model.DTO.response.BankslipWithFine;
+import com.xcar.model.DTO.request.BankslipDTO;
+import com.xcar.model.DTO.response.*;
 import com.xcar.model.entity.Bankslip;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,14 +24,16 @@ public interface BankslipMapper {
     List<BankslipListDTO> toListBankslipDTO(List<Bankslip> bankslips);
 
     @Mappings({
-            @Mapping(source = "id", target = "id"),
-            @Mapping(source = "due_date", target = "due_date"),
-            @Mapping(source = "total_in_cents", target = "total_in_cents"),
-            @Mapping(source = "customer", target = "customer"),
-            @Mapping(source = "fine", target = "fine"),
-            @Mapping(source = "status", target = "status")
+            @Mapping(expression = "java(\"200\")", target = "status"),
+            @Mapping(expression = "java(\"OK\")", target = "message"),
+            @Mapping(source = "id", target = "bankslip.id"),
+            @Mapping(source = "due_date", target = "bankslip.due_date"),
+            @Mapping(source = "total_in_cents", target = "bankslip.total_in_cents"),
+            @Mapping(source = "customer", target = "bankslip.customer"),
+            @Mapping(source = "fine", target = "bankslip.fine"),
+            @Mapping(source = "status", target = "bankslip.status")
     })
-    BankslipWithFine toDtoWithFine(Bankslip bankslip);
+    ResponseFineDTO toDtoFine(Bankslip bankslip);
 
     @Mappings({
             @Mapping(source = "due_date", target = "due_date"),
@@ -48,16 +48,26 @@ public interface BankslipMapper {
     Bankslip toEntity(BankslipDTO bankslipDTO);
 
     @Mappings({
-            @Mapping(source = "due_date", target = "due_date"),
-            @Mapping(source = "total_in_cents", target = "total_in_cents"),
-            @Mapping(source = "customer", target = "customer"),
-            @Mapping(source = "status", target = "status")
+            @Mapping(expression = "java(\"201\")", target = "status"),
+            @Mapping(expression = "java(\"Bankslip created\")", target = "message"),
+            @Mapping(source = "due_date", target = "bankslip.due_date"),
+            @Mapping(source = "total_in_cents", target = "bankslip.total_in_cents"),
+            @Mapping(source = "customer", target = "bankslip.customer"),
+            @Mapping(source = "status", target = "bankslip.status")
     })
-    BankslipDTO toDTO(Bankslip bankslip);
+    ResponseDTO toDTO(Bankslip bankslip);
 
     @Mappings({
             @Mapping(source = "status", target = "status")
     })
     BankslipStatusPay toStatusBeforePut(Bankslip bankslip);
+
+    @Mappings({
+            @Mapping(target = "status", expression = "java(\"204\")"),
+            @Mapping(target = "message", expression = "java(\"OK\")"),
+            @Mapping(target = "bankslip.id", source = "id"),
+            @Mapping(target = "bankslip.status", source = "status")
+    })
+    ResponsePayDTO toDTOPay(Bankslip bankslip);
 
 }

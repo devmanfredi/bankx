@@ -16,4 +16,10 @@ public interface BankslipRepository extends JpaRepository<Bankslip, String> {
     @Modifying
     @Query("UPDATE Bankslip b SET b.status = :status WHERE b.id = :id")
     void updateBankslipStatusById(@Param("id") String id, @Param("status") Status status);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Bankslip b SET b.status = :status WHERE b.id = :id")
+    void pay(@Param("id") String id, @Param("status") Status status);
+
 }

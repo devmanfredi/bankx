@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankslipStatusPay {
+    private String id;
     private Status status;
 }
