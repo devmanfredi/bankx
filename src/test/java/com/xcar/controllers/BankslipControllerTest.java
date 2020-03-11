@@ -2,9 +2,9 @@ package com.xcar.controllers;
 
 import com.xcar.builders.BankslipBuilder;
 import com.xcar.mapper.BankslipMapper;
-import com.xcar.model.DTO.BankslipDTO;
-import com.xcar.model.DTO.BankslipListDTO;
-import com.xcar.model.DTO.response.BankslipWithFine;
+import com.xcar.model.DTO.response.BankslipListDTO;
+import com.xcar.model.DTO.response.ResponseDTO;
+import com.xcar.model.DTO.response.ResponseFineDTO;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.repository.BankslipRepository;
 import com.xcar.service.BankslipService;
@@ -55,7 +55,7 @@ public class BankslipControllerTest {
     @Test
     public void dadoBoleto_quandoSalvar_entaoDeveRetornarBoleto() throws Exception {
         Bankslip bankslip = BankslipBuilder.bankslip(UUID.randomUUID().toString()).build();
-        BankslipDTO bankslipDTO = bkMapper.toDTO(bankslip);
+        ResponseDTO bankslipDTO = bkMapper.toDTO(bankslip);
         Mockito.when(bkRepository.save(bankslip)).thenReturn(bankslip);
 
         ResultActions boletoSalvo = mvc.perform(post("/rest/bankslips")
@@ -70,14 +70,14 @@ public class BankslipControllerTest {
     public void dadoBoleto_quandoBuscarPorId_entaoRetornarDetalhes() throws Exception {
         String uuid = UUID.randomUUID().toString();
         Bankslip build = BankslipBuilder.bankslip(uuid).build();
-        BankslipWithFine bankslip = bkMapper.toDtoWithFine(build);
-        Mockito.when(bkRepository.findById(bankslip.getId())).thenReturn(Optional.ofNullable(build));
+        ResponseFineDTO bankslip = bkMapper.toDtoFine(build);
+        Mockito.when(bkRepository.findById(bankslip.getBankslip().getId())).thenReturn(Optional.ofNullable(build));
 
         ResultActions boleto = mvc.perform(get("/rest/bankslips/" + uuid)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(convertObjectToJsonBytes(bankslip)))
                 .andExpect(status().isOk());
-        boleto.andExpect(jsonPath("$.id", Matchers.is(bankslip.getId())));
+        boleto.andExpect(jsonPath("$.id", Matchers.is(bankslip.getBankslip().getId())));
     }
 
     @Test
