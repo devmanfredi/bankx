@@ -28,9 +28,11 @@ public class BankslipController {
     private BankslipService bkService;
     private BankslipMapper bkMapper;
 
-
+    //region Save
     @ApiOperation(
+
             value = "Cria um Boleto",
+
             notes = "Método utilizado para criar um Boleto"
     )
     @ApiResponses(value = {
@@ -50,7 +52,9 @@ public class BankslipController {
         //TODO:Melhorar o retorno através de um mapper
         return bkMapper.toDTO(entity);
     }
+    //endregion
 
+    //region List
     @ApiOperation(
             value = "Retorna uma lista de boletos",
             notes = "Método utilizado para Listar todos os boletos"
@@ -59,9 +63,9 @@ public class BankslipController {
             @ApiResponse(code = 200, message = "Ok"),
     })
     @GetMapping("/bankslips")
-    private ResponseListDTO findAll(){
+    private ResponseListDTO findAll() {
         List billets = bkService.findAll();
-        if (billets.isEmpty()){
+        if (billets.isEmpty()) {
             return null;
         }
         ResponseListDTO responseListDTO = new ResponseListDTO();
@@ -70,7 +74,9 @@ public class BankslipController {
         responseListDTO.setBankslips(bkMapper.toListBankslipDTO(billets));
         return responseListDTO;
     }
+    //endregion
 
+    //region GetById
     @ApiOperation(
             value = "Detalhes de um Boleto",
             notes = "Método utilizado para ver os detalhes de um boleto"
@@ -87,9 +93,11 @@ public class BankslipController {
             throw new Exception("Boleto não encontrado!");
         }
         bankslip.get().setFine(bkService.fineCalculate(bankslip.get()));
-        return (bankslip.isPresent()) ? bkMapper.toDtoFine(bankslip.get()) : null;
+        return bankslip.map(value -> bkMapper.toDtoFine(value)).orElse(null);
     }
+    //endregion
 
+    //region Change Status
     @PutMapping("/bankslips/{id}")
     private BankslipStatusPay changeStatus(@PathVariable String id, @RequestBody BankslipStatusPay bankslipStatusPay) throws Exception {
         Optional<Bankslip> billet = bkService.findById(id);
@@ -99,6 +107,9 @@ public class BankslipController {
         Bankslip bankslip = bkService.changeStatus(billet, bankslipStatusPay);
         return bkMapper.toStatusBeforePut(bankslip);
     }
+    //endregion
+
+    //region Payment
     @PutMapping("/bankslips/pay/{id}")
     private ResponsePayDTO payment(@PathVariable String id) throws Exception {
         Optional<Bankslip> billet = bkService.findById(id);
@@ -108,5 +119,6 @@ public class BankslipController {
         Bankslip bankslipPaiding = bkService.pay(billet.get());
         return bkMapper.toDTOPay(bankslipPaiding);
     }
+    //endregion
 
 }
