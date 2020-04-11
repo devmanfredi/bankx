@@ -1,6 +1,5 @@
 package com.xcar.service;
 
-import com.xcar.model.DTO.response.BankslipStatusPay;
 import com.xcar.model.entity.Bankslip;
 import com.xcar.model.enums.Status;
 import com.xcar.repository.BankslipRepository;
@@ -62,22 +61,16 @@ public class BankslipService extends AbstractService {
         return DAYS.between(DUO_DATE_FROM_CALCULATE.atStartOfDay(ZoneId.systemDefault()).toLocalDate(), now);
     }
 
-    public Bankslip changeStatus(Optional<Bankslip> billet, BankslipStatusPay bankslipStatusPay) {
-        //bkRepository.updateBankslipStatusById(billet.get().getId(), bankslipStatusPay.getStatus());
+    public Bankslip changeStatus(Optional<Bankslip> billet) {
         if (Status.PENDING.equals(billet.get().getStatus())) {
-            bkRepository.updateBankslipStatusById(billet.get().getId(), bankslipStatusPay.getStatus());
+            bkRepository.updateBankslipStatusById(billet.get().getId(), Status.PAID);
+            billet.get().setStatus(Status.PAID);
         } else if (Status.PAID.equals(billet.get().getStatus())) {
-            bkRepository.updateBankslipStatusById(billet.get().getId(), bankslipStatusPay.getStatus());
+            bkRepository.updateBankslipStatusById(billet.get().getId(), Status.CANCELED);
+            billet.get().setStatus(Status.CANCELED);
+        } else {
+            billet.get().setStatus(Status.CANCELED);
         }
-        billet.get().setStatus(bankslipStatusPay.getStatus());
         return billet.get();
-    }
-
-    public Bankslip pay(Bankslip bankslip){
-        if (Status.PENDING.equals(bankslip.getStatus())) {
-            bkRepository.updateBankslipStatusById(bankslip.getId(), Status.PAID);
-            bankslip.setStatus(Status.PAID);
-        }
-        return bankslip;
     }
 }
