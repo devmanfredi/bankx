@@ -33,8 +33,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("API REST XCar")
-                .description("Web Service API da Aplicação XCar")
+                .title("API REST BANKX")
+                .description("Web Service API da Aplicação BANKX")
                 .version("1.0.0")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
